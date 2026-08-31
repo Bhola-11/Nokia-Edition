@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="{{ active_theme|default:'classic_green' }}" data-shell="{{ active_shell|default:'classic_navy' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}Snake Classic — Nokia Edition 3310{% endblock %}</title>
+    
+    <!-- Retro Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/retro-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nokia.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Retro Navbar Header -->
+    <nav class="retro-nav">
+        <a href="{% url 'game:play' %}" class="brand-logo">
+            <span style="font-size: 24px;">📱</span>
+            <span class="brand-title">NOKIA 3310 // SNAKE</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="{% url 'game:play' %}" class="nav-link">🎮 Play</a>
+            <a href="{% url 'leaderboard:index' %}" class="nav-link">🏆 Leaderboard</a>
+            <a href="{% url 'tournaments:list' %}" class="nav-link">⚔️ Tournaments</a>
+            <a href="{% url 'achievements:list' %}" class="nav-link">🎖️ Badges</a>
+            <a href="{% url 'game:replays_list' %}" class="nav-link">📼 Replays</a>
+            <a href="{% url 'analytics:dashboard' %}" class="nav-link">📊 Analytics</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:my_profile' %}" class="btn-retro btn-retro-cyan" style="padding: 4px 12px; font-size: 12px;">
+                    👤 {{ user.username }} (Lvl {{ player_profile.rank_level|default:1 }})
+                </a>
+                <a href="{% url 'accounts:logout' %}" class="nav-link" style="color: #e74c3c;">Logout</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" class="btn-retro" style="padding: 4px 12px; font-size: 12px;">Login</a>
+                <a href="{% url 'accounts:register' %}" class="btn-retro btn-retro-green" style="padding: 4px 12px; font-size: 12px;">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Global Flash Messages -->
+    {% if messages %}
+    <div style="max-width: 900px; margin: 15px auto 0; padding: 0 15px;">
+        {% for message in messages %}
+        <div style="background: #1e293b; border-left: 4px solid var(--accent-cyan); padding: 12px 18px; border-radius: 6px; margin-bottom: 8px; font-size: 14px;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Dynamic Content -->
+    <main style="flex: 1; padding: 20px 15px;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="retro-footer">
+        <div style="max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; gap: 15px;">
+            <div>
+                <b>Snake Classic — Nokia Edition</b> | Powered by Django MVT & HTML5 Canvas
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button id="btnPlayRingtone" class="btn-retro" style="padding: 3px 10px; font-size: 11px;">🎵 Nokia Tune</button>
+                <span>© 2026 TrainPlex Studio</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="{% static 'js/engine/SoundEngine.js' %}"></script>
+    <script src="{% static 'js/nokia-phone.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

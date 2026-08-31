@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Watching Replay — Nokia 3310 Snake{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+    
+    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 style="font-family: 'Press Start 2P', monospace; font-size: 16px; color: var(--accent-cyan); margin: 0 0 6px;">📼 Match Replay Viewer</h1>
+            <p style="color: var(--text-muted); font-size: 13px; margin: 0;">
+                Player: <b>{{ session.player.username|default:"Guest" }}</b> | Score: <b style="color: var(--accent-gold);">{{ session.score }}</b> | Mode: {{ session.mode|upper }}
+            </p>
+        </div>
+        <a href="{% url 'game:replays_list' %}" class="btn-retro" style="font-size: 12px;">← All Replays</a>
+    </div>
+
+    <!-- Nokia LCD Canvas Replay Screen -->
+    <div class="nokia-wrapper" style="padding: 0;">
+        <div class="nokia-phone" style="width: 380px;">
+            <div class="nokia-earpiece"></div>
+            <div class="nokia-brand">NOKIA // REPLAY</div>
+            
+            <div class="nokia-bezel" style="margin-bottom: 0;">
+                <div class="nokia-screen scanlines">
+                    <div class="lcd-statusbar">
+                        <span id="replayTickIndicator">Tick: 0 / 0</span>
+                        <span id="replayScoreIndicator" style="font-weight: bold;">Score: 0</span>
+                    </div>
+                    <canvas id="replayCanvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Playback Control Bar -->
+    <div class="retro-card" style="width: 100%; box-sizing: border-box;">
+        <div style="margin-bottom: 15px;">
+            <input type="range" id="replayScrubSlider" min="0" max="100" value="0" style="width: 100%; accent-color: var(--accent-cyan); cursor: pointer;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <button id="btnReplayPlay" class="btn-retro btn-retro-cyan" style="min-width: 110px; justify-content: center;">
+                ▶️ Play
+            </button>
+
+            <div style="display: flex; gap: 6px;">
+                <button id="btnSpeed1x" class="btn-retro btn-retro-gold" style="padding: 4px 10px; font-size: 11px;">1x</button>
+                <button id="btnSpeed2x" class="btn-retro" style="padding: 4px 10px; font-size: 11px;">2x</button>
+                <button id="btnSpeed4x" class="btn-retro" style="padding: 4px 10px; font-size: 11px;">4x</button>
+            </div>
+
+            <div style="font-size: 12px; color: var(--text-muted);">
+                Seed: <code>{{ session.seed }}</code> | Moves: <b>{{ session.move_count }}</b>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/anticheat/MoveRecorder.js' %}"></script>
+<script src="{% static 'js/replay/ReplayViewer.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sessionData = {{ session_json|safe }};
+        window.replayViewer = new ReplayViewer('replayCanvas', sessionData);
+    });
+</script>
+{% endblock %}

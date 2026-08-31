@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Play Snake — Nokia 3310 Edition{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; align-items: flex-start;">
+    
+    <!-- LEFT PANEL: Game Settings & Controls Summary -->
+    <div style="flex: 1; min-width: 280px; max-width: 340px; display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Game Configuration Card -->
+        <div class="retro-card">
+            <h3 style="margin-top: 0; color: var(--accent-green); font-family: 'Press Start 2P', monospace; font-size: 13px;">⚙️ Game Mode</h3>
+            
+            <div style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Mode</label>
+                <select id="gameModeSelect" class="retro-select">
+                    <option value="classic" selected>🐍 Classic 3310</option>
+                    <option value="time_attack">⏱️ Time Attack (60s)</option>
+                    <option value="endless">♾️ Endless Free-Roam</option>
+                    <option value="challenge">🏰 Labyrinth Challenge</option>
+                </select>
+            </div>
+
+            <div id="mapSelectGroup" style="margin-bottom: 14px; display: none;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Challenge Arena</label>
+                <select id="gameMapSelect" class="retro-select">
+                    {% for m in game_maps %}
+                    <option value="{{ m.map_id }}">{{ m.name }} ({{ m.difficulty_rating }}★)</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Speed Difficulty</label>
+                <select id="gameDifficultySelect" class="retro-select">
+                    <option value="slug">🐌 Slug (Slow - 140ms)</option>
+                    <option value="normal" selected>🐍 Normal (Classic - 100ms)</option>
+                    <option value="python">⚡ Python (Fast - 70ms)</option>
+                    <option value="cobra">🔥 Cobra (Insane - 45ms)</option>
+                </select>
+            </div>
+
+            <button id="btnStartGame" class="btn-retro btn-retro-green" style="width: 100%; justify-content: center; padding: 12px;">
+                ▶️ START MATCH
+            </button>
+        </div>
+
+        <!-- Customization & Visual Themes -->
+        <div class="retro-card">
+            <h3 style="margin-top: 0; color: var(--accent-cyan); font-family: 'Press Start 2P', monospace; font-size: 12px;">🎨 Retro Skin</h3>
+            
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">LCD Screen Palette</label>
+                <select id="quickThemeSelect" class="retro-select">
+                    <option value="classic_green" {% if active_theme == 'classic_green' %}selected{% endif %}>Classic Green LCD</option>
+                    <option value="amber_lcd" {% if active_theme == 'amber_lcd' %}selected{% endif %}>Vintage Amber</option>
+                    <option value="cyan_matrix" {% if active_theme == 'cyan_matrix' %}selected{% endif %}>Cyber Cyan Matrix</option>
+                    <option value="gameboy_olive" {% if active_theme == 'gameboy_olive' %}selected{% endif %}>GameBoy Olive</option>
+                    <option value="dark_oled" {% if active_theme == 'dark_oled' %}selected{% endif %}>Monochrome Dark OLED</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Phone Housing Color</label>
+                <select id="quickShellSelect" class="retro-select">
+                    <option value="classic_navy" {% if active_shell == 'classic_navy' %}selected{% endif %}>Classic Navy Blue</option>
+                    <option value="retro_silver" {% if active_shell == 'retro_silver' %}selected{% endif %}>Retro Silver</option>
+                    <option value="ruby_red" {% if active_shell == 'ruby_red' %}selected{% endif %}>Ruby Red</option>
+                    <option value="stealth_black" {% if active_shell == 'stealth_black' %}selected{% endif %}>Stealth Black</option>
+                    <option value="cyber_yellow" {% if active_shell == 'cyber_yellow' %}selected{% endif %}>Cyberpunk Yellow</option>
+                </select>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+                <span>Sound FX</span>
+                <input type="checkbox" id="quickSoundToggle" class="retro-checkbox" checked>
+            </div>
+        </div>
+
+        <!-- Tournament Widget -->
+        {% if active_tournament %}
+        <div class="retro-card" style="border-color: var(--accent-gold); background: linear-gradient(180deg, #1f2233 0%, #151829 100%);">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 20px;">{{ active_tournament.emoji }}</span>
+                <b style="color: var(--accent-gold); font-size: 14px;">{{ active_tournament.title }}</b>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 10px;">{{ active_tournament.description|truncatewords:15 }}</p>
+            <a href="{% url 'tournaments:detail' active_tournament.slug %}" class="btn-retro btn-retro-gold" style="width: 100%; justify-content: center; font-size: 12px; padding: 6px;">
+                View Tournament Standings
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- CENTER: Authentic Nokia 3310 Phone Housing -->
+    <div class="nokia-wrapper">
+        <div class="nokia-phone">
+            
+            <!-- Top Speaker & Brand -->
+            <div class="nokia-earpiece"></div>
+            <div class="nokia-brand">NOKIA</div>
+
+            <!-- Screen Bezel & LCD Glass -->
+            <div class="nokia-bezel">
+                <div class="nokia-screen scanlines">
+                    
+                    <!-- LCD Status Bar -->
+                    <div class="lcd-statusbar">
+                        <div class="signal-bars">
+                            <div class="bar" style="height: 3px;"></div>
+                            <div class="bar" style="height: 5px;"></div>
+                            <div class="bar" style="height: 7px;"></div>
+                            <div class="bar" style="height: 9px;"></div>
+                        </div>
+
+                        <div>
+                            <span>SCORE: </span><span id="hudScore">0</span>
+                            <span id="hudTimer" style="display: none; margin-left: 6px; color: #b71c1c;">60s</span>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span id="lcdClock">12:00</span>
+                            <div class="battery-meter">
+                                <div class="battery-level"></div>
+                                <div class="battery-tip"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 28x16 Pixel LCD Canvas -->
+                    <canvas id="snakeCanvas"></canvas>
+                </div>
+            </div>
+
+            <!-- Nokia 3310 Keypad Controls -->
+            <div class="nokia-keypad">
+                <!-- Navigation & Menu Buttons -->
+                <div class="nav-keys-row">
+                    <button class="phone-btn btn-nav" data-key="UP">▲ UP</button>
+                    <button class="phone-btn btn-nav-center" data-key="MENU">MENU</button>
+                    <button class="phone-btn btn-nav" data-key="C">C</button>
+                </div>
+
+                <!-- Number Pad Grid -->
+                <div class="numpad-grid">
+                    <button class="phone-btn btn-num" data-key="1"><span class="num">1</span><span class="sub">oo</span></button>
+                    <button class="phone-btn btn-num" data-key="2"><span class="num">2</span><span class="sub direction-indicator">▲ UP</span></button>
+                    <button class="phone-btn btn-num" data-key="3"><span class="num">3</span><span class="sub">def</span></button>
+
+                    <button class="phone-btn btn-num" data-key="4"><span class="num">4</span><span class="sub direction-indicator">◀ LEFT</span></button>
+                    <button class="phone-btn btn-num" data-key="5"><span class="num">5</span><span class="sub">jkl</span></button>
+                    <button class="phone-btn btn-num" data-key="6"><span class="num">6</span><span class="sub direction-indicator">RIGHT ▶</span></button>
+
+                    <button class="phone-btn btn-num" data-key="7"><span class="num">7</span><span class="sub">pqrs</span></button>
+                    <button class="phone-btn btn-num" data-key="8"><span class="num">8</span><span class="sub direction-indicator">▼ DOWN</span></button>
+                    <button class="phone-btn btn-num" data-key="9"><span class="num">9</span><span class="sub">wxyz</span></button>
+
+                    <button class="phone-btn btn-num" data-key="*"><span class="num">*</span><span class="sub">+</span></button>
+                    <button class="phone-btn btn-num" data-key="0"><span class="num">0</span><span class="sub">_</span></button>
+                    <button class="phone-btn btn-num" data-key="#"><span class="num">#</span><span class="sub">⇧</span></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL: Live Top Scores & Controls Guide -->
+    <div style="flex: 1; min-width: 280px; max-width: 320px; display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Controls Guide -->
+        <div class="retro-card">
+            <h3 style="margin-top: 0; color: var(--accent-gold); font-family: 'Press Start 2P', monospace; font-size: 12px;">🎯 Controls</h3>
+            <ul style="font-size: 13px; padding-left: 18px; line-height: 1.8; margin: 0; color: var(--text-muted);">
+                <li><b>Desktop:</b> Arrow Keys or <code>WASD</code></li>
+                <li><b>Numpad:</b> <code>2, 4, 6, 8</code> (Classic 3310)</li>
+                <li><b>Pause:</b> <code>Space</code> or <code>Menu</code></li>
+                <li><b>Touch / Mobile:</b> Swipe directly on screen or tap the on-screen keypad</li>
+            </ul>
+        </div>
+
+        <!-- Global Top Ticker -->
+        <div class="retro-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin: 0; color: var(--accent-green); font-family: 'Press Start 2P', monospace; font-size: 12px;">🏆 Top Sliders</h3>
+                <a href="{% url 'leaderboard:index' %}" style="font-size: 12px; color: var(--accent-cyan); text-decoration: none;">View All</a>
+            </div>
+
+            {% if top_scores %}
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                {% for s in top_scores %}
+                <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 6px 8px; background: rgba(0,0,0,0.3); border-radius: 6px;">
+                    <div>
+                        <span style="color: var(--accent-gold); font-weight: bold;">#{{ forloop.counter }}</span>
+                        <b>{{ s.player.username }}</b>
+                    </div>
+                    <span style="font-family: monospace; color: var(--accent-green); font-weight: bold;">{{ s.score }} pts</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">No high scores yet. Slide your way to #1!</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/anticheat/MoveRecorder.js' %}"></script>
+<script src="{% static 'js/engine/InputController.js' %}"></script>
+<script src="{% static 'js/engine/SnakeGame.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        window.snakeGame = new SnakeGame('snakeCanvas');
+    });
+</script>
+{% endblock %}

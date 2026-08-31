@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile.display_name }}'s Profile — Nokia 3310 Snake{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    
+    <!-- Profile Header Card -->
+    <div class="retro-card" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+        <div style="display: flex; gap: 18px; align-items: center;">
+            <div style="width: 64px; height: 64px; background: var(--accent-green); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);">
+                🐍
+            </div>
+            <div>
+                <h1 style="margin: 0 0 4px; font-size: 22px;">{{ profile.display_name }}</h1>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span class="badge-retro badge-gold">{{ profile.rank_title }}</span>
+                    <span style="color: var(--accent-cyan); font-size: 13px;">Level {{ profile.rank_level }} ({{ profile.xp }} XP)</span>
+                </div>
+                {% if profile.bio %}
+                <p style="color: var(--text-muted); font-size: 13px; margin: 6px 0 0;">{{ profile.bio }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if is_owner %}
+        <a href="{% url 'accounts:settings' %}" class="btn-retro">⚙️ Phone Settings</a>
+        {% endif %}
+    </div>
+
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div class="retro-card" style="padding: 16px;">
+            <div style="font-size: 11px; color: var(--text-muted);">ALL-TIME HIGH SCORE</div>
+            <b style="font-size: 20px; font-family: monospace; color: var(--accent-gold);">{{ profile.high_score }}</b>
+        </div>
+        <div class="retro-card" style="padding: 16px;">
+            <div style="font-size: 11px; color: var(--text-muted);">TOTAL GAMES PLAYED</div>
+            <b style="font-size: 20px; font-family: monospace;">{{ profile.total_games_played }}</b>
+        </div>
+        <div class="retro-card" style="padding: 16px;">
+            <div style="font-size: 11px; color: var(--text-muted);">TOTAL APPLES EATEN</div>
+            <b style="font-size: 20px; font-family: monospace; color: var(--accent-green);">{{ profile.total_apples_eaten }}</b>
+        </div>
+        <div class="retro-card" style="padding: 16px;">
+            <div style="font-size: 11px; color: var(--text-muted);">LONGEST SNAKE</div>
+            <b style="font-size: 20px; font-family: monospace; color: var(--accent-cyan);">{{ profile.max_snake_length }} segments</b>
+        </div>
+    </div>
+
+    <!-- Mode High Scores -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div class="retro-card">
+            <div style="font-size: 12px; color: var(--text-muted);">CLASSIC 3310</div>
+            <b style="font-size: 16px; color: var(--accent-green);">{{ high_scores_by_mode.classic.score|default:0 }} pts</b>
+        </div>
+        <div class="retro-card">
+            <div style="font-size: 12px; color: var(--text-muted);">TIME ATTACK</div>
+            <b style="font-size: 16px; color: var(--accent-gold);">{{ high_scores_by_mode.time_attack.score|default:0 }} pts</b>
+        </div>
+        <div class="retro-card">
+            <div style="font-size: 12px; color: var(--text-muted);">ENDLESS</div>
+            <b style="font-size: 16px; color: var(--accent-cyan);">{{ high_scores_by_mode.endless.score|default:0 }} pts</b>
+        </div>
+        <div class="retro-card">
+            <div style="font-size: 12px; color: var(--text-muted);">CHALLENGE</div>
+            <b style="font-size: 16px; color: #ff7675;">{{ high_scores_by_mode.challenge.score|default:0 }} pts</b>
+        </div>
+    </div>
+
+    <!-- Unlocked Achievements -->
+    <div class="retro-card" style="margin-bottom: 24px;">
+        <h3 style="margin-top: 0; color: var(--accent-gold); font-family: 'Press Start 2P', monospace; font-size: 12px;">🎖️ Unlocked Badges ({{ user_achievements.count }})</h3>
+        
+        {% if user_achievements %}
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">
+            {% for ua in user_achievements %}
+            <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.3); border: 1px solid var(--accent-gold); padding: 6px 12px; border-radius: 8px;">
+                <span style="font-size: 20px;">{{ ua.achievement.icon }}</span>
+                <div>
+                    <b style="font-size: 12px; color: var(--accent-gold);">{{ ua.achievement.title }}</b>
+                    <div style="font-size: 10px; color: var(--text-muted);">+{{ ua.achievement.xp_reward }} XP</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="font-size: 13px; color: var(--text-muted); margin: 0;">No badges unlocked yet. Keep playing to earn trophies!</p>
+        {% endif %}
+    </div>
+
+    <!-- Match History -->
+    <div class="retro-card">
+        <h3 style="margin-top: 0; color: var(--accent-cyan); font-family: 'Press Start 2P', monospace; font-size: 12px;">📜 Recent Match History</h3>
+        
+        {% if recent_games %}
+        <table class="retro-table">
+            <thead>
+                <tr>
+                    <th>MODE</th>
+                    <th>SCORE</th>
+                    <th>APPLES</th>
+                    <th>LENGTH</th>
+                    <th>DURATION</th>
+                    <th>DATE</th>
+                    <th>REPLAY</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for g in recent_games %}
+                <tr>
+                    <td><span class="badge-retro badge-green">{{ g.mode|upper }}</span></td>
+                    <td style="color: var(--accent-gold); font-family: monospace; font-weight: bold;">{{ g.score }}</td>
+                    <td>{{ g.apples_eaten }}</td>
+                    <td>{{ g.max_length }}</td>
+                    <td>{{ g.duration_seconds|floatformat:1 }}s</td>
+                    <td style="font-size: 12px; color: var(--text-muted);">{{ g.created_at|timesince }} ago</td>
+                    <td>
+                        <a href="{% url 'game:replay_viewer' g.session.id %}" class="btn-retro btn-retro-cyan" style="padding: 3px 8px; font-size: 11px;">
+                            📼 Replay
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="font-size: 13px; color: var(--text-muted); margin: 0;">No match records found.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
