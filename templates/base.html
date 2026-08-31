@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}Snake Classic — Nokia Edition 3310{% endblock %}</title>
     
-    <!-- Retro Stylesheets -->
-    <link rel="stylesheet" href="{% static 'css/retro-ui.css' %}">
-    <link rel="stylesheet" href="{% static 'css/nokia.css' %}">
+    <!-- Retro Stylesheets with Cache Busting -->
+    <link rel="stylesheet" href="{% static 'css/retro-ui.css' %}?v=2.1">
+    <link rel="stylesheet" href="{% static 'css/nokia.css' %}?v=2.1">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
