@@ -5,6 +5,9 @@ import sys
 
 def main():
     """Run administrative tasks."""
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    if current_path not in sys.path:
+        sys.path.insert(0, current_path)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'nokia_snake.settings')
     try:
         from django.core.management import execute_from_command_line

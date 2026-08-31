@@ -4,8 +4,11 @@ Django settings for nokia_snake project.
 
 from pathlib import Path
 import os
+import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 
 SECRET_KEY = 'django-insecure-nokia-retro-snake-super-secret-key-3310-classic'
 
