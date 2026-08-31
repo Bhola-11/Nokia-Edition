@@ -8,3 +8,6 @@ htmlcov/
 media/
 staticfiles/
 *.zip
+.env
+.env.*
+*.env
