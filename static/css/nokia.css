@@ -1,0 +1,347 @@
+/* ==========================================================================
+   NOKIA 3310 RETRO PHONE STYLES & LCD DOT-MATRIX THEMES
+   ========================================================================== */
+
+:root {
+    /* Classic Nokia 3310 Green LCD Palette */
+    --nokia-lcd-bg: #9bbc0f;
+    --nokia-lcd-pixel: #0f380f;
+    --nokia-lcd-grid: rgba(15, 56, 15, 0.08);
+    --nokia-lcd-border: #8bac0f;
+    
+    /* Phone Shell Colors */
+    --phone-shell-base: #1f334a;
+    --phone-shell-rim: #34495e;
+    --phone-key-base: #dcdde1;
+    --phone-key-text: #2f3640;
+    --phone-key-active: #718093;
+    --phone-accent: #2980b9;
+
+    --font-pixel: 'Courier New', 'VT323', monospace;
+}
+
+/* Palette Themes */
+[data-theme="amber_lcd"] {
+    --nokia-lcd-bg: #f39c12;
+    --nokia-lcd-pixel: #3e2723;
+    --nokia-lcd-grid: rgba(62, 39, 35, 0.1);
+    --nokia-lcd-border: #e67e22;
+}
+
+[data-theme="cyan_matrix"] {
+    --nokia-lcd-bg: #002b36;
+    --nokia-lcd-pixel: #00ffcc;
+    --nokia-lcd-grid: rgba(0, 255, 204, 0.12);
+    --nokia-lcd-border: #005f6b;
+}
+
+[data-theme="gameboy_olive"] {
+    --nokia-lcd-bg: #8bac0f;
+    --nokia-lcd-pixel: #306230;
+    --nokia-lcd-grid: rgba(48, 98, 48, 0.1);
+    --nokia-lcd-border: #9bbc0f;
+}
+
+[data-theme="dark_oled"] {
+    --nokia-lcd-bg: #121212;
+    --nokia-lcd-pixel: #00e676;
+    --nokia-lcd-grid: rgba(0, 230, 118, 0.08);
+    --nokia-lcd-border: #1e1e1e;
+}
+
+/* Phone Shell Themes */
+[data-shell="retro_silver"] {
+    --phone-shell-base: #7f8c8d;
+    --phone-shell-rim: #95a5a6;
+    --phone-key-base: #ecf0f1;
+    --phone-accent: #bdc3c7;
+}
+
+[data-shell="ruby_red"] {
+    --phone-shell-base: #8e1b1b;
+    --phone-shell-rim: #b82d2d;
+    --phone-key-base: #f5d6d6;
+    --phone-accent: #e74c3c;
+}
+
+[data-shell="stealth_black"] {
+    --phone-shell-base: #1a1a1a;
+    --phone-shell-rim: #2d3436;
+    --phone-key-base: #333333;
+    --phone-key-text: #ffffff;
+    --phone-accent: #555555;
+}
+
+[data-shell="cyber_yellow"] {
+    --phone-shell-base: #f1c40f;
+    --phone-shell-rim: #f39c12;
+    --phone-key-base: #2c3e50;
+    --phone-key-text: #f1c40f;
+    --phone-accent: #d35400;
+}
+
+/* ==========================================================================
+   NOKIA 3310 CHASSIS HOUSING
+   ========================================================================== */
+
+.nokia-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.nokia-phone {
+    width: 380px;
+    background: var(--phone-shell-base);
+    border-radius: 50px 50px 70px 70px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -5px 15px rgba(0, 0, 0, 0.6);
+    padding: 24px 22px 30px;
+    position: relative;
+    border: 3px solid var(--phone-shell-rim);
+    box-sizing: border-box;
+    user-select: none;
+}
+
+/* Phone Earpiece Speaker */
+.nokia-earpiece {
+    width: 60px;
+    height: 6px;
+    background: #111;
+    border-radius: 4px;
+    margin: 0 auto 12px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.nokia-brand {
+    text-align: center;
+    color: #ecf0f1;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 900;
+    letter-spacing: 4px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.8), 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+/* LCD Bezel Frame */
+.nokia-bezel {
+    background: #222;
+    border-radius: 20px;
+    padding: 12px 14px;
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(255, 255, 255, 0.1);
+    border: 2px solid #333;
+    margin-bottom: 20px;
+}
+
+/* LCD Screen Glass */
+.nokia-screen {
+    background: var(--nokia-lcd-bg);
+    border: 2px solid var(--nokia-lcd-border);
+    border-radius: 10px;
+    padding: 6px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* CRT Scanlines Overlay */
+.scanlines::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    z-index: 10;
+    background-size: 100% 3px, 6px 100%;
+    pointer-events: none;
+}
+
+/* LCD Header Status Bar */
+.lcd-statusbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--nokia-lcd-pixel);
+    font-family: var(--font-pixel);
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-bottom: 1px dotted var(--nokia-lcd-pixel);
+    margin-bottom: 4px;
+}
+
+.signal-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5px;
+    height: 10px;
+}
+
+.bar {
+    width: 2px;
+    background: var(--nokia-lcd-pixel);
+}
+
+.battery-meter {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--nokia-lcd-pixel);
+    padding: 1px;
+    width: 18px;
+    height: 8px;
+    position: relative;
+}
+
+.battery-level {
+    background: var(--nokia-lcd-pixel);
+    height: 100%;
+    width: 80%;
+}
+
+.battery-tip {
+    width: 2px;
+    height: 4px;
+    background: var(--nokia-lcd-pixel);
+    position: absolute;
+    right: -3px;
+}
+
+/* HTML5 Canvas */
+#snakeCanvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--nokia-lcd-bg);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* Game Overlay on LCD (Menu, Game Over) */
+.lcd-overlay {
+    position: absolute;
+    top: 24px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    background: var(--nokia-lcd-bg);
+    color: var(--nokia-lcd-pixel);
+    font-family: var(--font-pixel);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 5;
+    padding: 10px;
+}
+
+.lcd-overlay h2 {
+    font-size: 18px;
+    margin-bottom: 6px;
+    letter-spacing: 2px;
+}
+
+.lcd-overlay p {
+    font-size: 12px;
+    margin: 3px 0;
+}
+
+/* ==========================================================================
+   PHYSICAL KEYPAD SECTION
+   ========================================================================== */
+
+.nokia-keypad {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-keys-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.phone-btn {
+    background: var(--phone-key-base);
+    color: var(--phone-key-text);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: bold;
+    box-shadow: 0 4px 0 #95a5a6, 0 5px 5px rgba(0, 0, 0, 0.4);
+    transition: all 0.05s ease;
+    user-select: none;
+    outline: none;
+}
+
+.phone-btn:active, .phone-btn.pressed {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #95a5a6, 0 2px 2px rgba(0, 0, 0, 0.4);
+    background: var(--phone-key-active);
+    color: #fff;
+}
+
+.btn-nav {
+    width: 65px;
+    height: 34px;
+    font-size: 12px;
+    border-radius: 12px;
+}
+
+.btn-nav-center {
+    width: 80px;
+    height: 40px;
+    font-size: 13px;
+    background: var(--phone-accent);
+    color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.numpad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 10px;
+}
+
+.btn-num {
+    height: 38px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-num .num {
+    font-size: 15px;
+    line-height: 1;
+}
+
+.btn-num .sub {
+    font-size: 8px;
+    opacity: 0.8;
+    line-height: 1;
+    margin-top: 2px;
+    letter-spacing: 1px;
+}
+
+.direction-indicator {
+    color: #e74c3c;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+/* Arcade Fullscreen View Toggle */
+.arcade-mode-container {
+    background: #0d1117;
+    border: 3px solid #30363d;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}

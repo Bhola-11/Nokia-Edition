@@ -1,0 +1,244 @@
+/* ==========================================================================
+   RETRO 8-BIT UI STYLES (Cyber / Nokia / Arcade)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@400;600;800&display=swap');
+
+:root {
+    --bg-dark: #0b0f19;
+    --bg-card: #151d2f;
+    --bg-card-hover: #1e2942;
+    --border-retro: #2b3954;
+    --accent-green: #2ecc71;
+    --accent-cyan: #00f2fe;
+    --accent-gold: #f1c40f;
+    --accent-red: #e74c3c;
+    --text-main: #f0f6fc;
+    --text-muted: #8b949e;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.font-arcade {
+    font-family: 'Press Start 2P', monospace;
+}
+
+.font-mono-retro {
+    font-family: 'VT323', monospace;
+}
+
+/* Retro Glass Navbar */
+.retro-nav {
+    background: rgba(21, 29, 47, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--border-retro);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.brand-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 13px;
+    color: var(--accent-green);
+    text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--accent-cyan);
+}
+
+/* Retro Buttons */
+.btn-retro {
+    background: linear-gradient(180deg, #34495e 0%, #2c3e50 100%);
+    color: #fff;
+    border: 2px solid #4b6584;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 0 #1e272e;
+}
+
+.btn-retro:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #1e272e;
+    color: #fff;
+}
+
+.btn-retro:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #1e272e;
+}
+
+.btn-retro-green {
+    background: linear-gradient(180deg, #27ae60 0%, #219653 100%);
+    border-color: #2ecc71;
+    box-shadow: 0 4px 0 #145a32;
+}
+
+.btn-retro-cyan {
+    background: linear-gradient(180deg, #00b4d8 0%, #0077b6 100%);
+    border-color: #48cae4;
+    box-shadow: 0 4px 0 #023e8a;
+}
+
+.btn-retro-gold {
+    background: linear-gradient(180deg, #f39c12 0%, #d35400 100%);
+    border-color: #f1c40f;
+    box-shadow: 0 4px 0 #7e3a00;
+}
+
+/* Retro Cards & Grid */
+.retro-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-retro);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.retro-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.retro-table th {
+    background: #111827;
+    color: var(--text-muted);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--border-retro);
+}
+
+.retro-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-retro);
+    font-size: 14px;
+}
+
+.retro-table tr:hover td {
+    background: var(--bg-card-hover);
+}
+
+/* Inputs & Forms */
+.retro-input, .retro-select {
+    width: 100%;
+    background: #0d1322;
+    border: 2px solid var(--border-retro);
+    border-radius: 8px;
+    color: #fff;
+    padding: 10px 14px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.retro-input:focus, .retro-select:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+}
+
+/* Badges */
+.badge-retro {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: 'Press Start 2P', monospace;
+    text-transform: uppercase;
+}
+
+.badge-gold { background: #d35400; color: #f1c40f; border: 1px solid #f39c12; }
+.badge-silver { background: #34495e; color: #ecf0f1; border: 1px solid #bdc3c7; }
+.badge-bronze { background: #4a235a; color: #eb984e; border: 1px solid #af601a; }
+.badge-green { background: #145a32; color: #2ecc71; border: 1px solid #27ae60; }
+.badge-red { background: #641e16; color: #e74c3c; border: 1px solid #c0392b; }
+
+/* Achievement Trophy Card */
+.achievement-card {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-retro);
+    border-radius: 10px;
+    padding: 16px;
+    transition: transform 0.2s ease;
+}
+
+.achievement-card.unlocked {
+    border-color: var(--accent-gold);
+    background: linear-gradient(145deg, #1f2338 0%, #151a2e 100%);
+}
+
+.achievement-card.locked {
+    opacity: 0.5;
+    filter: grayscale(0.8);
+}
+
+.achievement-icon {
+    font-size: 32px;
+    min-width: 48px;
+    text-align: center;
+}
+
+/* Footer */
+.retro-footer {
+    background: #090d16;
+    border-top: 1px solid var(--border-retro);
+    padding: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: auto;
+}

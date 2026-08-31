@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings — Nokia 3310 Snake{% endblock %}
+
+{% block content %}
+<div style="max-width: 550px; margin: 20px auto;">
+    <div class="retro-card">
+        <h2 style="font-family: 'Press Start 2P', monospace; font-size: 16px; color: var(--accent-gold); margin: 0 0 20px; text-align: center;">⚙️ PHONE SETTINGS</h2>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Display Nickname</label>
+                {{ form.nickname }}
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Bio</label>
+                {{ form.bio }}
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">LCD Screen Palette Theme</label>
+                {{ form.theme }}
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Nokia 3310 Phone Housing Shell</label>
+                {{ form.phone_shell }}
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Sound FX Volume (0-100)</label>
+                {{ form.sound_volume }}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; font-size: 13px;">
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    {{ form.sound_enabled }} Sound FX Enabled
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    {{ form.scanlines_enabled }} CRT Scanlines
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    {{ form.touch_controls_enabled }} Touch Controls
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    {{ form.vibration_enabled }} Haptic Feedback
+                </label>
+            </div>
+
+            <button type="submit" class="btn-retro btn-retro-green" style="width: 100%; justify-content: center; padding: 10px;">
+                💾 Save Settings
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

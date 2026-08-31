@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Game Replays — Nokia 3310 Snake{% endblock %}
+
+{% block content %}
+<div style="max-width: 960px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h1 style="font-family: 'Press Start 2P', monospace; font-size: 18px; color: var(--accent-cyan); margin: 0 0 8px;">📼 Match Replays</h1>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 0;">Watch verified high score gameplay runs step-by-step on the canvas.</p>
+        </div>
+    </div>
+
+    <div class="retro-card">
+        {% if replays %}
+        <table class="retro-table">
+            <thead>
+                <tr>
+                    <th>PLAYER</th>
+                    <th>MODE</th>
+                    <th>DIFFICULTY</th>
+                    <th>SCORE</th>
+                    <th>APPLES</th>
+                    <th>LENGTH</th>
+                    <th>DURATION</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in replays %}
+                <tr>
+                    <td><b>{{ r.player.username|default:"Guest" }}</b></td>
+                    <td><span class="badge-retro badge-green">{{ r.mode|upper }}</span></td>
+                    <td>{{ r.difficulty|title }}</td>
+                    <td style="color: var(--accent-gold); font-weight: bold; font-family: monospace; font-size: 15px;">{{ r.score }}</td>
+                    <td>{{ r.apples_eaten }}</td>
+                    <td>{{ r.max_length }}</td>
+                    <td>{{ r.duration_seconds|floatformat:1 }}s</td>
+                    <td>
+                        <a href="{% url 'game:replay_viewer' r.id %}" class="btn-retro btn-retro-cyan" style="padding: 4px 10px; font-size: 11px;">
+                            ▶️ Watch Replay
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+            <p>No verified replays available yet. Play a game to record your first run!</p>
+            <a href="{% url 'game:play' %}" class="btn-retro btn-retro-green">Play Now</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
