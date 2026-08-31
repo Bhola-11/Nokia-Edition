@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Achievements & Badges — Nokia 3310 Snake{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
+        <div>
+            <h1 style="font-family: 'Press Start 2P', monospace; font-size: 20px; color: var(--accent-gold); margin: 0 0 8px;">🎖️ Trophy Showcase</h1>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 0;">Unlock retro achievement badges, earn XP, and level up your Nokia gamer rank.</p>
+        </div>
+        <div class="retro-card" style="padding: 10px 20px; text-align: center;">
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">UNLOCKED</div>
+            <b style="font-family: 'Press Start 2P', monospace; color: var(--accent-green); font-size: 16px;">{{ unlocked_count }} / {{ total_count }}</b>
+            <div style="font-size: 11px; color: var(--accent-cyan); margin-top: 2px;">{{ progress_percent }}% Complete</div>
+        </div>
+    </div>
+
+    {% for category_title, items in categorized_achievements.items %}
+    <div style="margin-bottom: 35px;">
+        <h2 style="font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--accent-cyan); border-bottom: 2px solid var(--border-retro); padding-bottom: 8px; margin-bottom: 16px;">
+            {{ category_title }}
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+            {% for item in items %}
+            <div class="achievement-card {% if item.is_unlocked %}unlocked{% else %}locked{% endif %}">
+                <div class="achievement-icon">{{ item.obj.icon }}</div>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <b style="font-size: 14px; color: {% if item.is_unlocked %}var(--accent-gold){% else %}#fff{% endif %};">{{ item.obj.title }}</b>
+                        <span style="font-size: 11px; color: var(--accent-cyan); font-family: monospace;">+{{ item.obj.xp_reward }} XP</span>
+                    </div>
+                    <p style="font-size: 12px; color: var(--text-muted); margin: 4px 0 0;">{{ item.obj.description }}</p>
+                    {% if item.is_unlocked %}
+                    <span style="display: inline-block; margin-top: 6px; font-size: 10px; color: var(--accent-green); font-weight: bold;">✓ UNLOCKED</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

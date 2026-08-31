@@ -1,0 +1,1 @@
+# apps/achievements/registry package
