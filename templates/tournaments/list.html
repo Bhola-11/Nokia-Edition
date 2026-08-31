@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Tournaments — Nokia 3310 Snake{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-family: 'Press Start 2P', monospace; font-size: 20px; color: var(--accent-gold); margin: 0 0 8px;">⚔️ Snake Tournaments</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin: 0;">Compete in timed competitive events, claim championship titles, and win massive XP bonuses.</p>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+        <h2 style="font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--accent-green); margin-bottom: 16px;">🔥 ACTIVE TOURNAMENTS</h2>
+        
+        {% if active_tournaments %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+            {% for t in active_tournaments %}
+            <div class="retro-card" style="border-color: var(--accent-gold); display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                        <span style="font-size: 32px;">{{ t.emoji }}</span>
+                        <span class="badge-retro badge-gold">ACTIVE</span>
+                    </div>
+                    <h3 style="margin: 0 0 8px; font-size: 16px;">{{ t.title }}</h3>
+                    <p style="color: var(--text-muted); font-size: 13px; margin: 0 0 12px;">{{ t.description }}</p>
+                    
+                    <div style="font-size: 12px; margin-bottom: 8px;">
+                        <span style="color: var(--text-muted);">Mode:</span> <b>{{ t.mode|upper }}</b> | 
+                        <span style="color: var(--text-muted);">Speed:</span> <b>{{ t.difficulty|title }}</b>
+                    </div>
+                    <div style="font-size: 12px; color: var(--accent-cyan); margin-bottom: 16px;">
+                        🏆 Prize: <b>{{ t.prize_title }} (+{{ t.prize_xp }} XP)</b>
+                    </div>
+                </div>
+
+                <a href="{% url 'tournaments:detail' t.slug %}" class="btn-retro btn-retro-green" style="justify-content: center; width: 100%; box-sizing: border-box;">
+                    View & Join Tournament
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="retro-card" style="text-align: center; padding: 30px; color: var(--text-muted);">
+            No active tournaments at this moment. Check back soon!
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

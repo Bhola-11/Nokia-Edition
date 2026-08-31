@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tournament.title }} — Nokia Snake Tournament{% endblock %}
+
+{% block content %}
+<div style="max-width: 960px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+                <span style="font-size: 36px;">{{ tournament.emoji }}</span>
+                <h1 style="font-family: 'Press Start 2P', monospace; font-size: 18px; color: var(--accent-gold); margin: 0;">{{ tournament.title }}</h1>
+            </div>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 0;">{{ tournament.description }}</p>
+        </div>
+
+        <div>
+            {% if user.is_authenticated %}
+                {% if user_entry %}
+                    <a href="{% url 'game:play' %}" class="btn-retro btn-retro-green">▶️ Play Tournament Match</a>
+                {% else %}
+                    <a href="{% url 'tournaments:join' tournament.slug %}" class="btn-retro btn-retro-gold">⚔️ Join Tournament</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'accounts:login' %}?next={% url 'tournaments:detail' tournament.slug %}" class="btn-retro btn-retro-cyan">Login to Enter</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tournament Overview Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div class="retro-card" style="padding: 14px;">
+            <div style="font-size: 11px; color: var(--text-muted);">EVENT STATUS</div>
+            <b style="font-size: 14px; color: var(--accent-green);">{{ tournament.status|upper }}</b>
+        </div>
+        <div class="retro-card" style="padding: 14px;">
+            <div style="font-size: 11px; color: var(--text-muted);">MODE & SPEED</div>
+            <b style="font-size: 14px;">{{ tournament.mode|upper }} ({{ tournament.difficulty|title }})</b>
+        </div>
+        <div class="retro-card" style="padding: 14px;">
+            <div style="font-size: 11px; color: var(--text-muted);">PRIZE REWARD</div>
+            <b style="font-size: 14px; color: var(--accent-gold);">{{ tournament.prize_title }}</b>
+        </div>
+        {% if user_entry %}
+        <div class="retro-card" style="padding: 14px; border-color: var(--accent-cyan);">
+            <div style="font-size: 11px; color: var(--accent-cyan);">YOUR BEST SCORE</div>
+            <b style="font-size: 16px; font-family: monospace;">{{ user_entry.best_score }} pts ({{ user_entry.attempts_count }} runs)</b>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Leaderboard Bracket -->
+    <div class="retro-card">
+        <h3 style="margin-top: 0; color: var(--accent-cyan); font-family: 'Press Start 2P', monospace; font-size: 12px;">📊 Tournament Standings</h3>
+        
+        {% if participants %}
+        <table class="retro-table">
+            <thead>
+                <tr>
+                    <th>RANK</th>
+                    <th>PLAYER</th>
+                    <th>BEST SCORE</th>
+                    <th>ATTEMPTS</th>
+                    <th>LAST PLAYED</th>
+                    <th>REPLAY</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in participants %}
+                <tr {% if user.is_authenticated and p.player == user %}style="background: rgba(0, 242, 254, 0.1);"{% endif %}>
+                    <td>
+                        {% if forloop.counter == 1 %}
+                            <span class="badge-retro badge-gold">🥇 #1</span>
+                        {% elif forloop.counter == 2 %}
+                            <span class="badge-retro badge-silver">🥈 #2</span>
+                        {% elif forloop.counter == 3 %}
+                            <span class="badge-retro badge-bronze">🥉 #3</span>
+                        {% else %}
+                            <b>#{{ forloop.counter }}</b>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <b>{{ p.player.username }}</b>
+                        <span style="font-size: 11px; color: var(--text-muted);">({{ p.player.profile.rank_title }})</span>
+                    </td>
+                    <td style="color: var(--accent-green); font-weight: bold; font-family: monospace; font-size: 15px;">{{ p.best_score }}</td>
+                    <td>{{ p.attempts_count }}</td>
+                    <td style="font-size: 12px; color: var(--text-muted);">{{ p.last_played_at|timesince }} ago</td>
+                    <td>
+                        {% if p.best_session %}
+                        <a href="{% url 'game:replay_viewer' p.best_session.id %}" class="btn-retro btn-retro-cyan" style="padding: 3px 8px; font-size: 11px;">
+                            📼 Replay
+                        </a>
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align: center; padding: 20px; color: var(--text-muted); margin: 0;">
+            No competitors yet. Be the first to claim the #1 spot!
+        </p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

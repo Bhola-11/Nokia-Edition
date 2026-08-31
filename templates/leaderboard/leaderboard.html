@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Global Leaderboards — Nokia 3310 Snake{% endblock %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto;">
+    
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-family: 'Press Start 2P', monospace; font-size: 20px; color: var(--accent-gold); margin: 0 0 8px;">🏆 Global Hall of Fame</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin: 0;">Verified Nokia 3310 high scores across all arenas and game modes.</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="retro-card" style="margin-bottom: 20px; padding: 15px;">
+        <form method="GET" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end;">
+            <div style="flex: 1; min-width: 150px;">
+                <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: bold;">GAME MODE</label>
+                <select name="mode" class="retro-select" onchange="this.form.submit()">
+                    <option value="all" {% if current_mode == 'all' %}selected{% endif %}>All Modes</option>
+                    <option value="classic" {% if current_mode == 'classic' %}selected{% endif %}>Classic 3310</option>
+                    <option value="time_attack" {% if current_mode == 'time_attack' %}selected{% endif %}>Time Attack</option>
+                    <option value="endless" {% if current_mode == 'endless' %}selected{% endif %}>Endless Free-Roam</option>
+                    <option value="challenge" {% if current_mode == 'challenge' %}selected{% endif %}>Labyrinth Challenge</option>
+                </select>
+            </div>
+
+            <div style="flex: 1; min-width: 150px;">
+                <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: bold;">DIFFICULTY</label>
+                <select name="difficulty" class="retro-select" onchange="this.form.submit()">
+                    <option value="all" {% if current_difficulty == 'all' %}selected{% endif %}>All Difficulties</option>
+                    <option value="slug" {% if current_difficulty == 'slug' %}selected{% endif %}>Slug</option>
+                    <option value="normal" {% if current_difficulty == 'normal' %}selected{% endif %}>Normal</option>
+                    <option value="python" {% if current_difficulty == 'python' %}selected{% endif %}>Python</option>
+                    <option value="cobra" {% if current_difficulty == 'cobra' %}selected{% endif %}>Cobra</option>
+                </select>
+            </div>
+
+            <div style="flex: 1; min-width: 150px;">
+                <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: bold;">TIMEFRAME</label>
+                <select name="time" class="retro-select" onchange="this.form.submit()">
+                    <option value="all_time" {% if current_time == 'all_time' %}selected{% endif %}>All-Time</option>
+                    <option value="today" {% if current_time == 'today' %}selected{% endif %}>Past 24 Hours</option>
+                    <option value="weekly" {% if current_time == 'weekly' %}selected{% endif %}>This Week</option>
+                    <option value="monthly" {% if current_time == 'monthly' %}selected{% endif %}>This Month</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px;">
+        
+        <!-- Main Scores Table -->
+        <div class="retro-card" style="flex: 3; min-width: 320px;">
+            {% if ranked_scores %}
+            <table class="retro-table">
+                <thead>
+                    <tr>
+                        <th>RANK</th>
+                        <th>PLAYER</th>
+                        <th>SCORE</th>
+                        <th>MODE</th>
+                        <th>DIFFICULTY</th>
+                        <th>APPLES</th>
+                        <th>DATE</th>
+                        <th>REPLAY</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in ranked_scores %}
+                    <tr>
+                        <td>
+                            {% if item.rank == 1 %}
+                                <span class="badge-retro badge-gold">🥇 #1</span>
+                            {% elif item.rank == 2 %}
+                                <span class="badge-retro badge-silver">🥈 #2</span>
+                            {% elif item.rank == 3 %}
+                                <span class="badge-retro badge-bronze">🥉 #3</span>
+                            {% else %}
+                                <b style="color: var(--text-muted);">#{{ item.rank }}</b>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'accounts:user_profile' item.score.player.username %}" style="color: #fff; text-decoration: none; font-weight: bold;">
+                                {{ item.score.player.username }}
+                            </a>
+                            <div style="font-size: 11px; color: var(--text-muted);">{{ item.score.player.profile.rank_title }}</div>
+                        </td>
+                        <td style="color: var(--accent-green); font-family: monospace; font-size: 16px; font-weight: bold;">
+                            {{ item.score.score }}
+                        </td>
+                        <td><span class="badge-retro badge-green">{{ item.score.mode|upper }}</span></td>
+                        <td>{{ item.score.difficulty|title }}</td>
+                        <td>{{ item.score.apples_eaten }}</td>
+                        <td style="font-size: 12px; color: var(--text-muted);">{{ item.score.created_at|date:"M d, H:i" }}</td>
+                        <td>
+                            <a href="{% url 'game:replay_viewer' item.score.session.id %}" class="btn-retro btn-retro-cyan" style="padding: 3px 8px; font-size: 11px;">
+                                📼 Replay
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <p>No scores match the selected filters yet.</p>
+                <a href="{% url 'game:play' %}" class="btn-retro btn-retro-green">Be the First!</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Side: Top XP Players -->
+        <div class="retro-card" style="flex: 1; min-width: 250px;">
+            <h3 style="margin-top: 0; color: var(--accent-cyan); font-family: 'Press Start 2P', monospace; font-size: 12px;">🌟 XP Masters</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+                {% for p in top_xp_players %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                    <div>
+                        <b style="font-size: 13px;">{{ p.user.username }}</b>
+                        <div style="font-size: 11px; color: var(--accent-gold);">{{ p.rank_title }} (Lvl {{ p.rank_level }})</div>
+                    </div>
+                    <span style="font-family: monospace; font-weight: bold; color: var(--accent-cyan);">{{ p.xp }} XP</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
