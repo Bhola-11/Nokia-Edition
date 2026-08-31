@@ -1,0 +1,1 @@
+# apps/anticheat/detectors package
